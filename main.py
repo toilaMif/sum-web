@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -24,3 +26,8 @@ async def calculate_sum(request: Request):
         return {"error": "invalid numbers"}
     
     return {"sum" : result}
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def read_root():
+    return FileResponse('static\index.html')
