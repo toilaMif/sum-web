@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sum_web</title>
+</head>
+<body>
+    <h1>Nhap 2 so de tinh tong</h1>
+    <form action="" id="sumForm">
+        <label for="num1">So thu nhat:</label>
+        <input type="number" name="num1" id="num1" placeholder="nhap so dau tien" request />
+        <br>
+        <label for="num2">So thu hai: </label>
+        <input type="number" name="num2" id="num2" placeholder="nhap so thu hai" request />
+        <button type="submit">Tong</button>
+    </form>
+    <h3>ket qua la: <span id="result"></span></h3>
+
+    <script>
+        document.getElementById('sumForm').addEventListener('submit', async function(e){
+            e.preventDefault();
+            const a = parseFloat (document.getElementById('num1').value);
+            const b = parseFloat (document.getElementById('num2').value);
+
+            try{
+                const response = await fetch('http://127.0.0.1:8000/sum',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+
+                    },
+                    body: JSON.stringify({num1:a,num2:b})
+
+                }); 
+                if(!response.ok){
+                    throw new Error("loi kho goi API")
+                }
+                const data = await response.json();
+                document.getElementById('result').textContent = data.sum;
+
+            }catch (error){
+                document.getElementById('result').textContent = 'loi: ' +error.message;
+            }
+        });
+    </script>
+</body>
+</html>
